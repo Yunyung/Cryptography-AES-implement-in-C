@@ -286,6 +286,11 @@ void Cipher()
     
 }
 
+void printUnsignedCharArrayToInt(unsigned char in[], int size){
+    for (int i = 0;i < size;i++){
+        printf("%d ", in[i]);
+    }
+}
 
 int main(){
     FILE *fp, *wp; // input file pointer, output(writer) file pointer
@@ -343,7 +348,10 @@ int main(){
     scanf("%s", &fileName); 
     wp = fopen(fileName,"wb");
 
+    
+    int blockNum = 0; // record processing block number(128 bit)
     feof_flag = 1;
+    printf("---------------------------------------------\n");
     while(feof_flag == 1){
         /**
          *  read file, read 16 char (1block, 128bit) 
@@ -375,7 +383,16 @@ int main(){
         for(int c = 0; c < 16;c++)  
             fprintf(wp, "%c", out[c]);
         
-        printf("Cipher : %s", out);
+        // print plaintext(character format) in Integer Format
+        printf("Block %d(128 bits) - plaintext.txt(Int format) : ", blockNum);
+        printUnsignedCharArrayToInt(in, 16);    
+        printf("\n");
+        // print Cipher(character format) in Integer Format
+        printf("Block %d(128 bits) - Cipher(Int format) : ", blockNum); // print ciphertext(char) in integer format
+        printUnsignedCharArrayToInt(out, 16);
+        printf("\n");
+        blockNum++;
+
         char c;
         if ((c = fgetc(fp)) == EOF){
             feof_flag = 0;
@@ -388,6 +405,8 @@ int main(){
     fclose(fp);
     rewind(wp);
     fclose(wp);
+
+    printf("------------------------------------------------\n");
     printf("Encryption process complete !! \n");
     
 }
